@@ -65,7 +65,7 @@ export const HelloAnimation = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center h-screen select-none">
-      <h1 className="text-5xl font-bitcount mb-10 text-center">
+      <h1 className="text-5xl font-inter mb-10 text-center">
         <span className="text-blue-700">П</span>
         <span className="text-red-600">о</span>
         <span className="text-yellow-400">и</span>
@@ -110,7 +110,7 @@ export const HelloAnimation = () => {
         </div>
       )}
       
-      <p className="font-light">
+      <p className="font-inter">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe
         asperiores soluta incidunt alias cumque a voluptatibus repudiandae,
         aliquid libero! Est eius voluptas suscipit dolorum! Illo atque adipisci

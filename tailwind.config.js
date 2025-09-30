@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        bitcount: ["Bitcount Ink", "sans-serif"],
+        sans: ['Inter Tight', 'sans-serif'],
       },
     },
   },
   plugins: [],
-};
+}
