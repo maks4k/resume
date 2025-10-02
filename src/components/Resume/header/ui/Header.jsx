@@ -7,47 +7,58 @@ import {
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
 import { Switch } from "@/shared/ui/switch";
-import { useState } from "react";
+import { About } from "../../Content/ui/About";
+import { Footer } from "../../Footer/ui/Footer";
+import { Contacts } from "../../Content/ui/Contacts";
+import { useThemeStore } from "@/store/themStore";
+import { Link } from "react-router-dom";
+import { Routes } from "@/constants/routes";
 
 export const Header = () => {
-  const [isLightTheme, setIsLightTheme] = useState(false);
-  const toggleTheme = () => {
-    setIsLightTheme((prev) => !prev);
-  };
+  const { isLightTheme, toggleTheme } = useThemeStore();
   return (
     <>
       <div
         className={`${
           isLightTheme ? "bg-white" : "bg-black"
-        } h-35 flex items-center`}
+        } h-35 flex items-center  `}
       >
         <NavigationMenu className="h-20 flex flex-row justify-around items-center w-full max-w-full">
           <NavigationMenuList className="flex flex-1 justify-around items-center h-full">
             {" "}
-            {/* Добавлен h-full */}
             <NavigationMenuItem className="flex items-center">
-              {" "}
-              {/* Добавлен flex items-center */}
-              <NavigationMenuTrigger className={`${isLightTheme ? "bg-black text-white" : "bg-white text-black"} cursor-pointer`}>
-                Products
-              </NavigationMenuTrigger>
-              {/* <NavigationMenuLink>Link</NavigationMenuLink> */}
+              <Link to={Routes.ABOUT}>
+                {" "}
+                <NavigationMenuTrigger
+                  className={`${
+                    isLightTheme ? "bg-black text-white" : "bg-white text-black"
+                  } cursor-pointer`}
+                >
+                  <NavigationMenuLink>About</NavigationMenuLink>
+                </NavigationMenuTrigger>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="flex items-center">
-              <NavigationMenuTrigger
-                className={`${
-                  isLightTheme ? "bg-black text-white" : "bg-white text-black"
-                } cursor-pointer`}
-              >
-                Contacts
-              </NavigationMenuTrigger>
-              {/* <NavigationMenuLink>Link</NavigationMenuLink> */}
+              <Link to={Routes.CONTACTS}>
+                <NavigationMenuTrigger
+                  className={`${
+                    isLightTheme ? "bg-black text-white" : "bg-white text-black"
+                  } cursor-pointer`}
+                >
+                  <NavigationMenuLink>Contacts</NavigationMenuLink>
+                </NavigationMenuTrigger>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="flex items-center">
-              <NavigationMenuTrigger className={`${isLightTheme ? "bg-black text-white" : "bg-white text-black"} cursor-pointer`}>
-                About
-              </NavigationMenuTrigger>
-              {/* <NavigationMenuLink>Link</NavigationMenuLink> */}
+              <Link to={Routes.PRODUCTS}>
+                <NavigationMenuTrigger
+                  className={`${
+                    isLightTheme ? "bg-black text-white" : "bg-white text-black"
+                  } cursor-pointer`}
+                >
+                  <NavigationMenuLink>Products</NavigationMenuLink>
+                </NavigationMenuTrigger>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
           <div className="flex flex-col items-center justify-center space-x-2 italic h-full">
@@ -59,7 +70,7 @@ export const Header = () => {
               } h-35 flex items-center`}
               htmlFor="airplane-mode"
             >
-              Сменить тему
+              Сhange site theme
             </label>
             <Switch
               id="airplane-mode"

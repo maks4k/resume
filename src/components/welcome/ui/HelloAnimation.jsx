@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Typed from "typed.js";
 import { HandCursor } from "./HandCursor";
 import { Button } from "@/shared/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@/constants/routes";
 
 export const HelloAnimation = () => {
   const el = useRef(null);
@@ -14,7 +16,7 @@ export const HelloAnimation = () => {
     left: 0,
     opacity: 0,
   });
-
+const navigate=useNavigate();
   useEffect(() => {
     typed.current = new Typed(el.current, {
       strings: [
@@ -52,6 +54,8 @@ export const HelloAnimation = () => {
             setTimeout(() => {
               button.classList.add("active");
               setTimeout(() => button.classList.remove("active"), 200);
+              navigate(Routes.ABOUT)
+
             }, 800);
           }, 500);
         }
@@ -61,7 +65,7 @@ export const HelloAnimation = () => {
     return () => {
       typed.current.destroy();
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="relative flex flex-col items-center justify-center h-screen select-none">
