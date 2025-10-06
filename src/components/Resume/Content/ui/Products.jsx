@@ -232,7 +232,7 @@ export const Products = () => {
         </div>
         <button
           onClick={closeImage}
-          className="absolute top-4 right-4 text-white text-3xl bg-gray-800 rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-white text-3xl bg-gray-800 rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
         >
           ×
         </button>

@@ -21,6 +21,7 @@ const { isLightTheme} = useThemeStore();
           <p className="mt-1">© {curentTime.getFullYear()} • {curentTime.toLocaleTimeString('ru-RU')}</p>
         </div>
       </div>
+      <p className='text-gray-500'> v 1.01</p>
     </footer>
   )
 }
