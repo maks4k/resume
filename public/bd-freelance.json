@@ -1,14 +1,16 @@
 [
-      {
+  {
     "id": 1,
-    "name": "safe",
-    "img": "////",
-    "description": "asd"
+    "title": "Legal security-PGS",
+    "img": "/img/bd-freeelance/Pgs.png",
+    "description": "Верстка 3 страниц:Услуги,Направления,О компании.Использовна Методология БЭМ.Чистая верстка HTML+CSS,Адаптив:Desctop+Mobile",
+    "site": "https://pgs-associates.com/services"
   },
   {
     "id": 2,
-    "name": "transit",
-    "img": "////",
-    "description": "asd"
+    "title": "Transit-BLR",
+    "img": "/img/bd-freeelance/bl-transfer.png",
+    "description": "Верстка Главной страницы.Методология БЭМ.Чистая верстка HTML+CSS,Адаптив:Desctop+Mobile",
+    "site": "https://autotransfer.by/"
   }
 ]

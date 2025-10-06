@@ -14,7 +14,7 @@ export const Footer = () => {
   }, []);
 const { isLightTheme} = useThemeStore();
   return (
-    <footer className={`py-6 ${isLightTheme ? "bg-white" : "bg-black"}`}>
+    <footer className={` py-16 ${isLightTheme ? "bg-white" : "bg-black"}`}>
       <div className="container mx-auto px-4">
         <div className={`text-center text-xs ${isLightTheme ? "text-black" : "text-gray-400"}`}>
           <p>Оптимизация • Скорость • Функциональность</p>

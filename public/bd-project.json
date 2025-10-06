@@ -1,38 +1,48 @@
 [
   {
     "id": 1,
-    "name": "aut-app",
-    "img": "////",
-    "description": "asd"
+    "title": "aut-app",
+    "img": [
+      "img/educ_and_pat_project/auth-ts.png",
+      "img/educ_and_pat_project/auth-forrgot.png"
+    ],
+    "technologies": "Frontend: React+State Management-Zustand+TypeScript+shadcnui+tailwind | Backend: Express.js + Prisma",
+    "description": "Система аутентификации с регистрацией через email и Google OAuth, функцией восстановления пароля и защищенными сессиями",
+    "site": "Проект пока что не загружен в сеть...."
   },
   {
     "id": 2,
-    "name": "desert-app",
-    "img": "////",
-    "description": "asd"
+    "title": "desert-app",
+    "img": "img/educ_and_pat_project/desert-app.png",
+    "technologies": "Frontend: Vanilla JavaScript | Backend: JSON Server (REST API)",
+    "description": "Клиент-серверное приложение с REST API на JSON Server для быстрого прототипирования и тестирования.Фенкция добвления товара в корзину.",
+    "site": "Проект пока что не загружен в сеть...."
   },
   {
     "id": 3,
-    "name": "popCorn-app",
-    "img": "////",
-    "description": "asd"
+    "title": "popCorn-app",
+    "img": "img/educ_and_pat_project/use-popcorn.png",
+    "technologies": "Frontend: React | API: RESTful Movie Database",
+    "description": "Приложение для поиска фильмов с просмотром детальной информации, рейтингом и персональными оценками",
+    "site": "Проект пока что не загружен в сеть...."
   },
   {
     "id": 4,
-    "name": "pizza-app",
-    "img": "////",
-    "description": "asd"
+    "title": "pizza-app",
+    "img": [
+      "img/educ_and_pat_project/react-pizza.png",
+      "img/educ_and_pat_project/pizza-cart.png"
+    ],
+       "technologies":"Frontend: React + State Management-Redux | Backend: MockAPI (REST API)",
+    "description": "Интернет-магазин пиццы с возможностью поиска товаров, фильтрацией по категориям и добавлением в корзину с сохранением состояния",
+    "site": "Проект пока что не загружен в сеть...."
   },
   {
     "id": 5,
-    "name": "smart-timer",
-    "img": "////",
-    "description": "asd"
-  },
-  {
-    "id": 6,
-    "name": "todo",
-    "img": "////",
-    "description": "asd"
+    "title": "smart-timer",
+     "img": "img/educ_and_pat_project/use-popcorn.png",
+    "description": "Умный планировщик задач с таймером",
+    "technologies":"Frontend: React + Hooks | Библиотека: react-countdown",
+    "site": "https://smart-timer-tusks-t6w6.vercel.app/"
   }
 ]

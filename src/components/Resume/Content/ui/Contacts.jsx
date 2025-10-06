@@ -137,9 +137,9 @@ export const Contacts = () => {
                   <p className={`text-sm ${isLightTheme ? "text-gray-500" : "text-gray-400"}`}>Мессенджер</p>
                 </div>
               </a>
-
-              {/* GitHub */}
               <a 
+               target="_blank" 
+                rel="noopener noreferrer"
                 href="https://github.com/maks4k" 
                 className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
                   isLightTheme 

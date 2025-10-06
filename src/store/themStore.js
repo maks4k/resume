@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export const useThemeStore=create((set)=>({
-isLightTheme: true,
+isLightTheme: false,
  toggleTheme: () => set((state) => ({ 
     isLightTheme: !state.isLightTheme 
   })),
