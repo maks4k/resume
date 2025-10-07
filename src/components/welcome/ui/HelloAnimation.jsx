@@ -113,13 +113,6 @@ const navigate=useNavigate();
           <HandCursor />
         </div>
       )}
-      
-      <p className="font-inter">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe
-        asperiores soluta incidunt alias cumque a voluptatibus repudiandae,
-        aliquid libero! Est eius voluptas suscipit dolorum! Illo atque adipisci
-        tempore repudiandae quae!
-      </p>
     </div>
   );
 };
