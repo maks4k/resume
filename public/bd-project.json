@@ -15,7 +15,7 @@
     "title": "desert-app",
     "img": "img/educ_and_pat_project/desert-app.png",
     "technologies": "Frontend: Vanilla JavaScript | Backend: JSON Server (REST API)",
-    "description": "Клиент-серверное приложение с REST API на JSON Server для быстрого прототипирования и тестирования.Фенкция добвления товара в корзину.",
+    "description": "Клиент-серверное приложение с REST API на JSON Server для быстрого прототипирования и тестирования.Функция добвления товара в корзину.",
     "site": "Проект пока что не загружен в сеть...."
   },
   {

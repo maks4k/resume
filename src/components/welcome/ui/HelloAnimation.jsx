@@ -4,6 +4,7 @@ import { HandCursor } from "./HandCursor";
 import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@/constants/routes";
+import { HeadingSearch } from "./HeadingSearch";
 
 export const HelloAnimation = () => {
   const el = useRef(null);
@@ -16,7 +17,7 @@ export const HelloAnimation = () => {
     left: 0,
     opacity: 0,
   });
-const navigate=useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     typed.current = new Typed(el.current, {
       strings: [
@@ -46,7 +47,8 @@ const navigate=useNavigate();
           setTimeout(() => {
             setMouseCursorStyle({
               top: buttonRect.top + window.scrollY + buttonRect.height / 2 - 10,
-              left: buttonRect.left + window.scrollX + buttonRect.width / 2 - 10,
+              left:
+                buttonRect.left + window.scrollX + buttonRect.width / 2 - 10,
               opacity: 3,
             });
 
@@ -54,8 +56,7 @@ const navigate=useNavigate();
             setTimeout(() => {
               button.classList.add("active");
               setTimeout(() => button.classList.remove("active"), 200);
-              navigate(Routes.ABOUT)
-
+              navigate(Routes.ABOUT);
             }, 800);
           }, 500);
         }
@@ -69,14 +70,7 @@ const navigate=useNavigate();
 
   return (
     <div className="relative flex flex-col items-center justify-center h-screen select-none">
-      <h1 className="text-5xl font-inter mb-10 text-center">
-        <span className="text-blue-700">П</span>
-        <span className="text-red-600">о</span>
-        <span className="text-yellow-400">и</span>
-        <span className="text-blue-600">с</span>
-        <span className="text-green-700">к</span>
-      </h1>
-
+      <HeadingSearch/>
       {/* span с typed.js включая его встроенный курсор */}
       <span
         ref={el}
@@ -86,7 +80,6 @@ const navigate=useNavigate();
           fontFamily: "sans-serif",
         }}
       />
-
       <Button
         ref={buttonRef}
         className="mt-10 w-36 text-center border border-gray-300 rounded-full px-6 py-2 shadow-sm transition-transform bg-white text-black"
