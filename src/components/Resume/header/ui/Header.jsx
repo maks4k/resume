@@ -1,18 +1,15 @@
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
 import { Switch } from "@/shared/ui/switch";
-import { About } from "../../Content/ui/About";
-import { Footer } from "../../Footer/ui/Footer";
-import { Contacts } from "../../Content/ui/Contacts";
 import { useThemeStore } from "@/store/themStore";
 import { Link } from "react-router-dom";
 import { Routes } from "@/constants/routes";
+import { Moon, Sun } from "lucide-react";
 
 export const Header = () => {
   const { isLightTheme, toggleTheme } = useThemeStore();
@@ -64,13 +61,12 @@ export const Header = () => {
           <div className="flex flex-col items-center justify-center space-x-2 italic h-full">
             {" "}
             {/* Добавлен h-full */}
-            <label
-              className={`${
-                isLightTheme ? "text-black " : "text-white"
-              } h-35 flex items-center`}
-              htmlFor="airplane-mode"
-            >
-              Сhange site theme
+            <label className={`h-35 flex items-center`} htmlFor="airplane-mode">
+              {isLightTheme ? (
+                <Sun className="text-black " />
+              ) : (
+                <Moon className="text-white" />
+              )}
             </label>
             <Switch
               id="airplane-mode"

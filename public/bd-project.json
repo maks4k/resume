@@ -40,7 +40,7 @@
   {
     "id": 5,
     "title": "smart-timer",
-     "img": "img/educ_and_pat_project/use-popcorn.png",
+     "img": "img/educ_and_pat_project/smart-timer.png",
     "description": "Умный планировщик задач с таймером",
     "technologies":"Frontend: React + Hooks | Библиотека: react-countdown",
     "site": "https://smart-timer-tusks-t6w6.vercel.app/"
