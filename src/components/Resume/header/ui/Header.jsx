@@ -21,6 +21,8 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+
+
   // Отслеживаем скролл для перемещения меню
   useEffect(() => {
     const handleScroll = () => {

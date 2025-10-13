@@ -3,6 +3,7 @@ import { useThemeStore } from "@/store/themStore";
 import { FrelanceProducts } from "./FrelanceProducts";
 import { PetProducts } from "./PetProducts";
 import { useProductsRequest } from "../../model/useProductsRequest";
+import { ProductsSkeleton } from "../skeletonProducts/ProductsSkeleton";
 
 export const Products = () => {
   const { isLightTheme } = useThemeStore();
@@ -13,7 +14,11 @@ export const Products = () => {
     personalData,
     freelanceData,
     openImage,
+    loading
   } = useProductsRequest();
+    if (loading) {
+    return <ProductsSkeleton />;
+  }
   return (
     <div className={`${isLightTheme ? "bg-white" : "bg-black"}`}>
       <FrelanceProducts freelanceData={freelanceData} openImage={openImage} />
