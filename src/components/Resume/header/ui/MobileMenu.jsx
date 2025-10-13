@@ -71,7 +71,7 @@ export const MobileMenu = ({
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Products
+            Portfolio
             </Link>
           </div>
         </div>

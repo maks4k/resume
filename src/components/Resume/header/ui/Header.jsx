@@ -81,7 +81,7 @@ export const Header = () => {
                         : "bg-white text-black"
                     } cursor-pointer`}
                   >
-                    <NavigationMenuLink>Products</NavigationMenuLink>
+                    <NavigationMenuLink>Portfolio</NavigationMenuLink>
                   </NavigationMenuTrigger>
                 </Link>
               </NavigationMenuItem>
