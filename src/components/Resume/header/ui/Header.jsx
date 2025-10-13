@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { Routes } from "@/constants/routes";
 import { Moon, Sun} from "lucide-react";
 
-import { MobileMenu } from "../MobileMenu";
+import { MobileMenu } from "./MobileMenu";
 import { MobileButtonMenu } from "./MobileButtonMenu";
 
 export const Header = () => {
