@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "type": "module",
+  "type": "module", 
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
@@ -10,8 +10,5 @@
     "nodemailer": "^6.9.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
   }
 }
