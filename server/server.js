@@ -2,7 +2,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
-import 'dotenv/config'
+import "dotenv/config";
 
 //запускаем приложение express
 const app = express();
@@ -12,12 +12,53 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 //учит серевер понимать json
 app.use(express.json());
-//тестовый ответ от сервера в браузере
-app.get("/api/test", (req, resp) => {
-  resp.json({ message: "server workicng" });
+
+// 3. Создаем транспорт для отправки писем
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASS,
+  },
 });
 
+const sendToTelegramm = async (email, messageText) => {
+  try {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_ID;
+    const text = `
+📧 Новое сообщение с сайта
+От: ${email}
+Сообщение: ${messageText}
+Время: ${new Date().toLocaleString("ru-RU")}
+    `.trim();
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/sendMessage`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id : chatId,
+          text: text,
+        }),
+      }
+    );
+    const result = await response.json();
 
+    if (result.ok) {
+      console.log("✅ Уведомление отправлено в Telegram");
+      return true;
+    } else {
+      console.log("❌ Ошибка Telegram:", result);
+      return false;
+    }
+  } catch (error) {
+    console.log("❌ Ошибка подключения к Telegram:", error.message);
+    return false;
+  }
+};
 
 app.post("/api/send-email", async (req, resp) => {
   try {
@@ -29,21 +70,14 @@ app.post("/api/send-email", async (req, resp) => {
         message: "Все поля обязательны для заполнения",
       });
     }
-    // 3. Создаем транспорт для отправки писем
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASS,
-      },
-    });
+
     // 4. Настраиваем письмо
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: process.env.RECEIVER_EMAIL,
       replyTo: email,
       subject: `💼 Новое сообщение от ${email}`,
-      html:`
+      html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #2c3e50; text-align: center;">💼 Новый заказ с сайта</h2>
       
@@ -66,19 +100,32 @@ app.post("/api/send-email", async (req, resp) => {
     </div>
   `,
     };
-        // 5. Отправляем письмо
-        await transporter.sendMail(mailOptions);
-          // 6. Отправляем успешный ответ
-          resp.json({
-            success:true,
-            message:"Сообщение успешно отправлено!Я свяжусь с вами в ближайшие время"
-          }) 
+    // 5. Отправляем письмо
+    await transporter.sendMail(mailOptions);
+    // Отправляем уведомление в Telegram (не ждем результат)
+try {
+  const telegramSuccess = await sendToTelegramm(email, message);
+  
+  if (telegramSuccess) {
+    console.log('✅ Telegram получил уведомление');
+  } else {
+    console.log('❌ Telegram не получил уведомление, но email отправлен');
+  }
+} catch (error) {
+  console.log('❌ Ошибка при отправке в Telegram:', error);
+};
+    // 6. Отправляем успешный ответ
+    resp.json({
+      success: true,
+      message:
+        "Сообщение успешно отправлено!Я свяжусь с вами в ближайшие время",
+    });
   } catch (error) {
-    console.error("Ошибка отправки",error);
+    console.error("Ошибка отправки", error);
     resp.status(500).json({
-        success:false,
-        message:"Произошла ошибка при отправке сообщения"
-    })
+      success: false,
+      message: "Произошла ошибка при отправке сообщения",
+    });
   }
 });
 

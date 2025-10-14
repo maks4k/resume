@@ -1,7 +1,7 @@
 import React from 'react'
 import { useThemeStore } from '@/store/themStore';
 import { useDateNow } from '../model/useDateNow';
-import { ContactForm } from './ContactForm';
+import { ContactForm } from './ContactFormFooter';
 
 export const Footer = () => {
 const {currentTime}=useDateNow();

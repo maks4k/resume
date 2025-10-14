@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useThemeStore } from "@/store/themStore";
 import { useForm } from "react-hook-form";
 import { Loader } from "./Loader";
+import { useFormFooter } from "../model/useForm";
 
 export const ContactForm = () => {
   const {
@@ -11,9 +12,8 @@ export const ContactForm = () => {
     reset,
   } = useForm();
   const { isLightTheme } = useThemeStore();
-
-  const [isLoading, setIsLoading] = useState(false); //состояние лоадинга
-  const [submitStatus, setSubmitStatus] = useState(""); //состояние отправки формы
+  const { submitStatus, setSubmitStatus, isLoading, setIsLoading } =
+    useFormFooter();
   //функция отправки формы
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -41,16 +41,6 @@ export const ContactForm = () => {
       setIsLoading(false);
     }
   };
-useEffect(() => {
-    if (submitStatus) {
-      const timer = setTimeout(() => {
-        setSubmitStatus(""); // Очищаем статус через 5 секунд
-      }, 3000);
-      
-      return () => clearTimeout(timer); // Очищаем таймер при размонтировании
-    }
-  }, [submitStatus]); // Запускается при изменении submitStatus
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,7 +60,7 @@ useEffect(() => {
                 message: "Должно быть минимум 20 символов",
               },
             })}
-            placeholder="Опишите каким бы вы хотели видеть свой сайт"
+            placeholder="Опишите каким бы вы хотели видеть свой веб-сайт"
             rows="5"
             className={`p-4 border-2 rounded-lg text-base outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all resize-y min-h-[140px] w-full ${
               isLightTheme
@@ -126,13 +116,13 @@ useEffect(() => {
           </div>
         </div>
       </div>
-    {submitStatus === 'success' && (
+      {submitStatus === "success" && (
         <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg z-50">
           ✅ Сообщение отправлено! Я свяжусь с вами скоро.
         </div>
       )}
 
-      {submitStatus === 'error' && (
+      {submitStatus === "error" && (
         <div className="fixed top-4 right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50">
           ❌ Ошибка отправки. Попробуйте еще раз.
         </div>
