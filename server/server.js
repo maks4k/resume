@@ -199,9 +199,9 @@ app.get("/api/health", (req, res) => {
     }
   });
 });
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+// });
 //указываем на каком порте будет работать локальный сервер
 // Указываем на каком порте будет работать локальный сервер
 app.listen(PORT, () => {
