@@ -27,16 +27,12 @@ app.use(express.static(path.join(__dirname, "..", "dist")));
 // Транспорт для отправки писем
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "smtp-relay.brevo.com",
     port: 587,
-    secure: false, // true для 465, false для других портов
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASS,
+      user: "твой-email@gmail.com", // любой email
+      pass: "твой-api-ключ-brevo", // получишь в brevo.com
     },
-    tls: {
-      rejectUnauthorized: false
-    }
   });
 };
 // Валидация email на сервере(помимо реакт-хукформы)
