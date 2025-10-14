@@ -27,23 +27,23 @@ app.use(express.static(path.join(__dirname, "..", "dist")));
 // Транспорт для отправки писем
 const createTransporter = () => {
   return nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true для 465, false для других портов
     auth: {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_APP_PASS,
     },
-    // Добавляем таймауты
-    pool: true,
-    maxConnections: 1,
-    socketTimeout: 15000, // 15 секунд
-    connectionTimeout: 15000,
+    tls: {
+      rejectUnauthorized: false
+    }
   });
 };
 // Валидация email на сервере(помимо реакт-хукформы)
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+// const isValidEmail = (email) => {
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   return emailRegex.test(email);
+// };
 
 const sendToTelegramm = async (email, messageText) => {
   try {
@@ -87,25 +87,25 @@ const sendToTelegramm = async (email, messageText) => {
   }
 };
 // Валидация входных данных
-const validateInput = (email, message) => {
-  if (!email || !message) {
-    return "Все поля обязательны для заполнения";
-  }
+// const validateInput = (email, message) => {
+//   if (!email || !message) {
+//     return "Все поля обязательны для заполнения";
+//   }
   
-  if (!isValidEmail(email)) {
-    return "Некорректный формат email";
-  }
+//   if (!isValidEmail(email)) {
+//     return "Некорректный формат email";
+//   }
   
-  if (message.length < 5) {
-    return "Сообщение должно содержать минимум 5 символов";
-  }
+//   if (message.length < 5) {
+//     return "Сообщение должно содержать минимум 5 символов";
+//   }
   
-  if (message.length > 1000) {
-    return "Сообщение слишком длинное (максимум 1000 символов)";
-  }
+//   if (message.length > 1000) {
+//     return "Сообщение слишком длинное (максимум 1000 символов)";
+//   }
   
-  return null; // null означает, что ошибок нет
-};
+//   return null; // null означает, что ошибок нет
+// };
 // app.post("/api/send-email", async (req, resp) => {
 //   try {
 //     // 1. Получаем данные из тела запроса
