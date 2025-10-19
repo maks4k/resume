@@ -17,15 +17,17 @@ export const ContactForm = () => {
   //функция отправки формы
   const onSubmit = async (data) => {
     setIsLoading(true);
+    const API_URL = import.meta.env.VITE_API_URL|| 'http://localhost:5000'
     try {
-      const responce = await fetch("https://resumesite-production.up.railway.app/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const result = await responce.json();
+    const response = await fetch(`${API_URL}/api/send-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+      const result = await response.json();
       // 4. Проверяем успешность
       if (result.success) {
         setSubmitStatus("success"); // Успех
