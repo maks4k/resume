@@ -44,7 +44,7 @@ app.use(express.json());
 // обслуживание статических файлов
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
-
+// 1
 
 
 
