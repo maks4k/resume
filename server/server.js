@@ -6,29 +6,24 @@ import "dotenv/config";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Для ES modules - ДОБАВЛЯЕМ ЭТО
+// Для ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//запускаем приложение express
 const app = express();
-
 const PORT = process.env.PORT || 5000;
-//позволяет фронту общаться с бэком
-//позволяет фронту общаться с бэком
+
+// CORS
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Список разрешенных доменов
       const allowedOrigins = [
-        "http://localhost:5173", // Локальный Vite
-        "https://resume-sooty-seven-86.vercel.app", // Продакшен фронт
+        "http://localhost:5173",
+        "https://resume-sooty-seven-86.vercel.app", 
+        "http://185.119.59.38",
+        "http://sozdat-moshniy-web.ru"
       ];
-
-      // Разрешаем запросы без origin (например, из мобильных приложений)
       if (!origin) return callback(null, true);
-
-      // Проверяем есть ли origin в списке разрешенных
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -39,38 +34,30 @@ app.use(
     credentials: true,
   })
 );
-//учит серевер понимать json
+
 app.use(express.json());
-// обслуживание статических файлов
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
-// 1
-
-
-
-
-// Транспорт для отправки писем
+// Транспорт для отправки писем (ТОЛЬКО YANDEX)
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true для 465, false для других портов
+    host: "smtp.yandex.ru",
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
+      user: process.env.YANDEX_USER,
+      pass: process.env.YANDEX_PASS,
+    }
   });
 };
-// Валидация email на сервере(помимо реакт-хукформы)
+
+// Валидация email
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-const sendToTelegramm = async (email, messageText) => {
+const sendToTelegram = async (email, messageText) => {
   try {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_ID;
@@ -111,30 +98,26 @@ const sendToTelegramm = async (email, messageText) => {
     return false;
   }
 };
+
 const validateInput = (email, message) => {
   if (!email || !message) {
     return "Все поля обязательны для заполнения";
   }
-
   if (!isValidEmail(email)) {
     return "Некорректный формат email";
   }
-
   if (message.length < 5) {
     return "Сообщение должно содержать минимум 5 символов";
   }
-
   if (message.length > 1000) {
     return "Сообщение слишком длинное (максимум 1000 символов)";
   }
-
-  return null; // null означает, что ошибок нет
+  return null;
 };
 
 app.post("/api/send-email", async (req, resp) => {
   try {
     const { email, message } = req.body;
-
     console.log("📧 Получено сообщение:", { email, message });
 
     const validationError = validateInput(email, message);
@@ -146,18 +129,14 @@ app.post("/api/send-email", async (req, resp) => {
       });
     }
 
-    // Функция для отправки email с таймаутом
+    // Функция для отправки email
     const sendEmailWithTimeout = async () => {
       try {
-        // Проверка переменных окружения
-        if (
-          !process.env.GMAIL_USER ||
-          !process.env.GMAIL_APP_PASS ||
-          !process.env.RECEIVER_EMAIL
-        ) {
+        // Проверка переменных окружения (ТОЛЬКО YANDEX)
+        if (!process.env.YANDEX_USER || !process.env.YANDEX_PASS || !process.env.RECEIVER_EMAIL) {
           console.error("❌ Отсутствуют переменные окружения для email:");
-          console.error("GMAIL_USER:", !!process.env.GMAIL_USER);
-          console.error("GMAIL_APP_PASS:", !!process.env.GMAIL_APP_PASS);
+          console.error("YANDEX_USER:", !!process.env.YANDEX_USER);
+          console.error("YANDEX_PASS:", !!process.env.YANDEX_PASS);
           console.error("RECEIVER_EMAIL:", !!process.env.RECEIVER_EMAIL);
           return false;
         }
@@ -171,12 +150,22 @@ app.post("/api/send-email", async (req, resp) => {
         const transporter = createTransporter();
 
         const mailOptions = {
-          from: process.env.GMAIL_USER,
+          from: process.env.YANDEX_USER,
           to: process.env.RECEIVER_EMAIL,
           replyTo: email,
           subject: `💼 Новое сообщение от ${email}`,
           html: `
-            <!-- твой HTML код -->
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #333;">Новое сообщение с сайта-резюме</h2>
+              <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+                <p><strong>От:</strong> ${email}</p>
+                <p><strong>Сообщение:</strong></p>
+                <p style="white-space: pre-wrap;">${message}</p>
+              </div>
+              <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                Отправлено: ${new Date().toLocaleString('ru-RU')}
+              </p>
+            </div>
           `,
         };
 
@@ -187,24 +176,21 @@ app.post("/api/send-email", async (req, resp) => {
         console.log("❌ Ошибка отправки email:", error.message);
         return false;
       }
-    }; // ⬅️ ЗАКРЫВАЕМ sendEmailWithTimeout
+    };
 
     // Запускаем обе отправки параллельно
     const [emailSuccess, telegramSuccess] = await Promise.allSettled([
       sendEmailWithTimeout(),
-      sendToTelegramm(email, message),
+      sendToTelegram(email, message),
     ]);
 
-    // Логируем результаты
     console.log("📧 Email результат:", emailSuccess.status);
     console.log("🤖 Telegram результат:", telegramSuccess.status);
 
-    // Возвращаем реальный результат
     if (emailSuccess.status === "fulfilled" && emailSuccess.value) {
       resp.json({
         success: true,
-        message:
-          "Сообщение успешно отправлено! Я свяжусь с вами в ближайшее время",
+        message: "Сообщение успешно отправлено! Я свяжусь с вами в ближайшее время",
       });
     } else {
       resp.status(500).json({
@@ -213,14 +199,13 @@ app.post("/api/send-email", async (req, resp) => {
       });
     }
   } catch (error) {
-    // ⬅️ ДОБАВЛЯЕМ catch для основного try
     console.error("❌ Общая ошибка:", error);
     resp.status(500).json({
       success: false,
       message: "Произошла ошибка при отправке сообщения",
     });
   }
-}); // ⬅️ ЗАКРЫВАЕМ app.post
+});
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -229,25 +214,21 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "development",
     services: {
-      email: !!process.env.GMAIL_USER,
+      email: !!process.env.YANDEX_USER,
       telegram: !!(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_ID),
     },
   });
 });
 
-// Указываем на каком порте будет работать локальный сервер
+// Запуск сервера
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
   console.log(
-    `📧 Email service: ${
-      process.env.GMAIL_USER ? "✅ Configured" : "❌ Not configured"
-    }`
+    `📧 Email service: ${process.env.YANDEX_USER ? "✅ Configured" : "❌ Not configured"}`
   );
   console.log(
-    `🤖 Telegram: ${
-      process.env.TELEGRAM_BOT_TOKEN ? "✅ Configured" : "❌ Not configured"
-    }`
+    `🤖 Telegram: ${process.env.TELEGRAM_BOT_TOKEN ? "✅ Configured" : "❌ Not configured"}`
   );
   console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
-}); // ⬅️ ЗАКРЫВАЕМ app.listen
+});
