@@ -150,11 +150,12 @@ app.post("/api/send-email", async (req, resp) => {
         const transporter = createTransporter();
 
         const mailOptions = {
-          from: process.env.YANDEX_USER,
+        from: `"Имя вашего сервиса" <${process.env.YANDEX_USER}>`,  
           to: process.env.RECEIVER_EMAIL,
           replyTo: email,
           subject: `💼 Новое сообщение от ${email}`,
           html: `
+           <p>письмо с моего сайта</p>
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #333;">Новое сообщение с сайта-резюме</h2>
               <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
