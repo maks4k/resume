@@ -130,7 +130,7 @@ app.post("/api/send-email", async (req, resp) => {
     }
 
     // Функция для отправки email
-    const sendEmailWithTimeout = async () => {
+    const sendEmail = async () => {
       try {
         // Проверка переменных окружения (ТОЛЬКО YANDEX)
         if (!process.env.YANDEX_USER || !process.env.YANDEX_PASS || !process.env.RECEIVER_EMAIL) {
@@ -138,24 +138,27 @@ app.post("/api/send-email", async (req, resp) => {
           console.error("YANDEX_USER:", !!process.env.YANDEX_USER);
           console.error("YANDEX_PASS:", !!process.env.YANDEX_PASS);
           console.error("RECEIVER_EMAIL:", !!process.env.RECEIVER_EMAIL);
-          return false;
+          throw new Error("Missing email environment variables");
         }
 
         // Проверяем что email валидный
         if (!email || !email.includes("@")) {
           console.error("❌ Невалидный email:", email);
-          return false;
+          throw new Error("Invalid email format");
         }
 
         const transporter = createTransporter();
 
+        // Проверяем подключение к SMTP
+        await transporter.verify();
+        console.log("✅ SMTP подключение успешно");
+
         const mailOptions = {
-        from: `"Имя вашего сервиса" <${process.env.YANDEX_USER}>`,  
+          from: `"Сайт-резюме" <${process.env.YANDEX_USER}>`,  
           to: process.env.RECEIVER_EMAIL,
           replyTo: email,
           subject: `💼 Новое сообщение от ${email}`,
           html: `
-           <p>письмо с моего сайта</p>
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #333;">Новое сообщение с сайта-резюме</h2>
               <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
@@ -170,33 +173,38 @@ app.post("/api/send-email", async (req, resp) => {
           `,
         };
 
-        await transporter.sendMail(mailOptions);
-        console.log("✅ Email отправлен успешно");
+        const result = await transporter.sendMail(mailOptions);
+        console.log("✅ Email отправлен успешно. MessageId:", result.messageId);
         return true;
       } catch (error) {
         console.log("❌ Ошибка отправки email:", error.message);
-        return false;
+        console.log("❌ Детали ошибки:", error);
+        throw error;
       }
     };
 
     // Запускаем обе отправки параллельно
-    const [emailSuccess, telegramSuccess] = await Promise.allSettled([
-      sendEmailWithTimeout(),
+    const [emailResult, telegramResult] = await Promise.allSettled([
+      sendEmail(),
       sendToTelegram(email, message),
     ]);
 
-    console.log("📧 Email результат:", emailSuccess.status);
-    console.log("🤖 Telegram результат:", telegramSuccess.status);
+    console.log("📧 Email результат:", emailResult.status, emailResult.reason);
+    console.log("🤖 Telegram результат:", telegramResult.status);
 
-    if (emailSuccess.status === "fulfilled" && emailSuccess.value) {
+    // ВАЖНО: Отправляем успех даже если телеграм упал, но email отправлен
+    if (emailResult.status === "fulfilled" && emailResult.value) {
       resp.json({
         success: true,
         message: "Сообщение успешно отправлено! Я свяжусь с вами в ближайшее время",
       });
     } else {
+      // Более детальная ошибка
+      const errorMessage = emailResult.reason?.message || "Ошибка при отправке сообщения";
+      console.log("❌ Финальная ошибка:", errorMessage);
       resp.status(500).json({
         success: false,
-        message: "Ошибка при отправке сообщения. Попробуйте еще раз.",
+        message: errorMessage,
       });
     }
   } catch (error) {
@@ -225,11 +233,7 @@ app.get("/api/health", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
-  console.log(
-    `📧 Email service: ${process.env.YANDEX_USER ? "✅ Configured" : "❌ Not configured"}`
-  );
-  console.log(
-    `🤖 Telegram: ${process.env.TELEGRAM_BOT_TOKEN ? "✅ Configured" : "❌ Not configured"}`
-  );
+  console.log(`📧 Email service: ${process.env.YANDEX_USER ? "✅ Configured" : "❌ Not configured"}`);
+  console.log(`🤖 Telegram: ${process.env.TELEGRAM_BOT_TOKEN ? "✅ Configured" : "❌ Not configured"}`);
   console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
 });
