@@ -55,7 +55,7 @@ export const Header = () => {
                         : "bg-white text-black"
                     } cursor-pointer`}
                   >
-                    <NavigationMenuLink>About</NavigationMenuLink>
+                   <span>About</span>
                   </NavigationMenuTrigger>
                 </Link>
               </NavigationMenuItem>
@@ -68,7 +68,7 @@ export const Header = () => {
                         : "bg-white text-black"
                     } cursor-pointer`}
                   >
-                    <NavigationMenuLink>Contacts</NavigationMenuLink>
+                   <span>Contacts</span>
                   </NavigationMenuTrigger>
                 </Link>
               </NavigationMenuItem>
@@ -81,7 +81,7 @@ export const Header = () => {
                         : "bg-white text-black"
                     } cursor-pointer`}
                   >
-                    <NavigationMenuLink>Portfolio</NavigationMenuLink>
+               <span>Portfolio</span>
                   </NavigationMenuTrigger>
                 </Link>
               </NavigationMenuItem>

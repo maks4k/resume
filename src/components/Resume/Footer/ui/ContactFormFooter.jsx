@@ -17,7 +17,7 @@ export const ContactForm = () => {
   //функция отправки формы
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const API_URL = import.meta.env.VITE_API_URL|| 'https://localhost:5000'
+    const API_URL = import.meta.env.VITE_API_URL|| 'http://localhost:5000'
     try {
     const response = await fetch(`${API_URL}/api/send-email`, {
       method: "POST",
