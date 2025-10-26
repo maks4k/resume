@@ -34,7 +34,7 @@ export const Services = () => {
             <p
               className={`text-sm ${isLightTheme ? "text-gray-600" : "text-gray-400"}`}
             >
-              Адаптивная верстка по Figma
+              Адаптивная верстка по Figma+seo-оптимизация
             </p>
           </div>
           <div
@@ -52,13 +52,13 @@ export const Services = () => {
               обновляя контент с помощью JavaScript. Вместо полной загрузки
               новой страницы при переходе, SPA подгружает только необходимые
               данные и изменяет содержимое текущей страницы, что делает работу с
-              ним быстрой и плавной, как у нативного приложения. Примеры таких
+              ним быстрой и плавной, как у нативного приложения.Примеры таких
               приложений – "Госуслуги",Gmail, Кинопоиск HD.{" "}
             </h4>
             <p
               className={`text-sm ${isLightTheme ? "text-gray-600" : "text-gray-400"}`}
             >
-              SPA на React + TypeScript
+              SPA на React + TypeScript+seo-оптимизация
             </p>
           </div>
           <div
@@ -81,7 +81,7 @@ export const Services = () => {
             <p
               className={`text-sm ${isLightTheme ? "text-gray-600" : "text-gray-400"}`}
             >
-             Адаптивная верстка по Figma.
+             Адаптивная верстка по Figma+seo-оптимизация
             </p>
           </div>
         </div>
