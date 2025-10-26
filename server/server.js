@@ -5,89 +5,6 @@ import cors from "cors";
 import "dotenv/config";
 import path from "path";
 import { fileURLToPath } from "url";
-import puppeteer from "puppeteer";
-
-// SEO
-// 🔍 Функция для определения поисковых ботов
-const isSearchBot = (userAgent) => {
-  // Список самых популярных ботов
-  const bots = [
-    "googlebot", // Google
-    "bingbot", // Bing (Microsoft)
-    "yandexbot", // Yandex
-    "slurp", // Yahoo
-    "duckduckbot", // DuckDuckGo
-    "baiduspider", // Baidu (Китай)
-    "facebot", // Facebook
-    "twitterbot", // Twitter
-    "whatsapp", // WhatsApp
-    "telegrambot", // Telegram
-    "linkedinbot", // LinkedIn
-    "pinterest", // Pinterest
-  ];
-
-  // Если userAgent не передан - это не бот
-  if (!userAgent) return false;
-
-  // Приводим к нижнему регистру для проверки
-  const agent = userAgent.toLowerCase();
-
-  // Проверяем есть ли любой из ботов в userAgent
-  return bots.some((bot) => agent.includes(bot));
-};
-// 🚀 Функция пререндеринга для ботов
-async function prerenderPage(url) {
-  let browser;
-  try {
-    console.log(`🔍 Пререндеринг для: ${url}`);
-
-    // Запускаем виртуальный браузер (без графического интерфейса)
-    browser = await puppeteer.launch({
-      headless: "new", // Режим без окон
-      args: [
-        "--no-sandbox", // Безопасность для сервера
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage", // Экономия памяти
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-      ],
-    });
-
-    // Создаем новую вкладку
-    const page = await browser.newPage();
-    page.setDefaultNavigationTimeout(8000); // 8 секунд на навигацию
-    // @ts-ignore
-    page.setDefaultTimeout(5000); // 5 секунд на любые операции
-
-    // Устанавливаем нормальный user-agent (как у обычного браузера)
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    );
-
-    // Переходим на страницу и ЖДЕМ полной загрузки
-    await page.goto(url, {
-      waitUntil: "networkidle0", // Ждем когда сетевые запросы закончатся
-      timeout: 8000, // Максимум 8 секунд ждем
-    });
-
-    // Дополнительная задержка для React (он может рендерить асинхронно)
-    await page.waitForTimeout(1000);
-
-    // Получаем готовый HTML после выполнения всего JavaScript
-    const html = await page.content();
-    return html;
-  } catch (error) {
-    console.error("❌ Ошибка пререндеринга:", error.message);
-    return null; // Если ошибка - возвращаем null
-  } finally {
-    // Всегда закрываем браузер чтобы не текла память
-    if (browser) {
-      await browser.close();
-    }
-  }
-}
 
 // Для ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -319,55 +236,25 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// 🎯 УМНАЯ обработка всех маршрутов для SEO
-app.get("*", async (req, res) => {
-  const userAgent = req.headers["user-agent"];
-   const currentPath = req.originalUrl || req.url
+// 🎯 ПРОСТАЯ обработка всех маршрутов - БЕЗ ПРЕРЕНДЕРИНГА
+app.get("*", (req, res) => {
+  const currentPath = req.originalUrl || req.url;
 
-  console.log(`📨 Получен запрос: ${path}`);
-  console.log(`👤 User Agent: ${userAgent}`);
+  console.log(`📨 Получен запрос: ${currentPath}`);
 
   // 🛑 Пропускаем API роуты и файлы с расширениями
   if (currentPath.startsWith("/api/") || currentPath.includes(".")) {
-    console.log(`⏩ Пропускаем (API или файл): ${path}`);
+    console.log(`⏩ Пропускаем (API или файл): ${currentPath}`);
     return res.status(404).send("Not found");
   }
 
-  // 🤖 Проверяем是否是 поисковый бот
-  if (isSearchBot(userAgent)) {
-    console.log(`🤖 Обнаружен поисковый бот: ${path}`);
-
-    try {
-      // ✅ УНИВЕРСАЛЬНЫЙ URL ДЛЯ ЛОКАЛ И ПРОДАКШЕНА
-      const protocol = req.protocol; // http или https
-      const host = req.get("host"); // автоматически берет домен
-      const baseUrl = `${protocol}://${host}`;
-
-      console.log(`🔄 Начинаем пререндеринг: ${baseUrl}${path}`);
-
-      const prerenderedHtml = await prerenderPage(`${baseUrl}${path}`);
-
-      if (prerenderedHtml) {
-        console.log(`✅ Отдаем пререндеренную версию для: ${path}`);
-        return res.send(prerenderedHtml);
-      } else {
-        console.log(`❌ Пререндеринг не удался, отдаем SPA`);
-        // Если пререндеринг не сработал - отдаем обычную версию
-        return res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-      }
-    } catch (error) {
-      console.log("⚠️ Ошибка в пререндеринге, отдаем SPA:", error.message);
-      return res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-    }
-  }
-
-  // 👨‍💻 Для обычных пользователей - отдаем SPA как обычно
-  console.log(`👤 Обычный пользователь, отдаем SPA: ${path}`);
+  // 👨‍💻 Для ВСЕХ пользователей (включая ботов) - отдаем SPA
+  console.log(`👤 Отдаем SPA для: ${currentPath}`);
   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 
 // 🚀 Запуск сервера
-app.listen(PORT,() => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
   console.log(
@@ -380,6 +267,6 @@ app.listen(PORT,() => {
       process.env.TELEGRAM_BOT_TOKEN ? "✅ Configured" : "❌ Not configured"
     }`
   );
-  console.log(`🎯 SEO Пререндеринг: ✅ АКТИВЕН для ботов`);
+  console.log(`🎯 SEO: ✅ Базовые мета-теги в HTML`);
   console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
 });
