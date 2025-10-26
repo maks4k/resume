@@ -13,7 +13,7 @@ export const FrelanceProducts = ({freelanceData,openImage}) => {
                 : "bg-gray-800 text-amber-100 border border-purple-900 shadow-lg shadow-purple-500/30"
             }`}
           >
-            Проекты выполненные на фриланс
+           Коммерческие кейсы
           </h2>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto">
       {freelanceData.map((item) => (
