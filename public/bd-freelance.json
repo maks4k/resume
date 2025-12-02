@@ -12,5 +12,12 @@
     "img": "/img/bd-freeelance/bl-transfer.png",
     "description": "Верстка Главной страницы.Методология БЭМ.Чистая верстка HTML+CSS,Адаптив:Desctop+Mobile",
     "site": "https://autotransfer.by/"
+  },
+  {
+     "id": 3,
+    "title": "Master stirka",
+    "img": "/img/bd-freeelance/BolshiaStirka.png",
+    "description": "Верстка лендинга,HTML+CSS,Адаптив:Desctop+notebook+notepad+mobile.Форма обратной связи с функцией отправки сообщения в WhatsApp",
+    "site": "https://bolshaiy-stirka-verstka.vercel.app/"
   }
 ]

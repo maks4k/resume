@@ -42,7 +42,7 @@ export const FrelanceProducts = ({freelanceData,openImage}) => {
           </div>
           <div className="mb-4 flex-grow">
             <p
-              className={`text-sm leading-relaxed ${
+              className={`text-sm leading-relaxed  break-words ${
                 isLightTheme ? "text-gray-600" : "text-gray-300"
               }`}
             >
