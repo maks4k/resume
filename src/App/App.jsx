@@ -35,19 +35,6 @@ function App() {
         {/* Open Graph базовые (переопределяются на страницах) */}
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://sozdat-moshniy-web.ru/og-image.png" />
-        
-        {/* Базовый title и description (будут переопределены на страницах) */}
-        <title>Веб-разработка Брянск | Создание сайтов</title>
-        <meta name="description" content="Профессиональная веб-разработка в Брянске. Создание современных сайтов и приложений на React и Next.js. Полный цикл разработки.Включая Seo-оптимизацию и Развертывание приложений. Сайты-визитки.Лендинги. Создание сайтов с нуля. Разработка сайтов с нуля." />
-        <meta name="keywords" content="веб-разработка брянск, создание сайтов брянск, react разработка, node.js программист,seo-оптимизация,развертывание веб-приложения .Сайты-визитки.Лендинги. Создание сайтов с нуля. Разработка сайтов с нуля." />
-        
-        {/* Open Graph для главной */}
-        <meta property="og:title" content="Веб-разработка Брянск | Создание сайтов" />
-        <meta property="og:description" content="Профессиональная веб-разработка в Брянске. Создание сайтов на React и Node.js с SEO и развертыванием. Сайты-визитки.Лендинги" />
-        <meta property="og:url" content="https://sozdat-moshniy-web.ru" />
-        
-        {/* Каноническая ссылка для главной */}
-        <link rel="canonical" href="https://sozdat-moshniy-web.ru" />
       </Helmet>
       
       <AppRouter />
