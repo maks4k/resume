@@ -8,7 +8,7 @@ import { RouterProvider } from "react-router";
 import { ProductsPage } from "@/pages/ProductsPage";
 import { HelloAnimation } from "@/components/welcome/ui/HelloAnimation";
 
-// src/app/AppRouter.jsx
+
 const router = createBrowserRouter([
   {
     path: Routes.ANIMATION,          
